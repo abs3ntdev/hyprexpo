@@ -1,7 +1,0 @@
-/home/abs3nt/Projects/github.com/abs3ntdev/hyprexpo/main/build/CMakeFiles/hyprexpo.dir
-/home/abs3nt/Projects/github.com/abs3ntdev/hyprexpo/main/build/CMakeFiles/edit_cache.dir
-/home/abs3nt/Projects/github.com/abs3ntdev/hyprexpo/main/build/CMakeFiles/rebuild_cache.dir
-/home/abs3nt/Projects/github.com/abs3ntdev/hyprexpo/main/build/CMakeFiles/list_install_components.dir
-/home/abs3nt/Projects/github.com/abs3ntdev/hyprexpo/main/build/CMakeFiles/install.dir
-/home/abs3nt/Projects/github.com/abs3ntdev/hyprexpo/main/build/CMakeFiles/install/local.dir
-/home/abs3nt/Projects/github.com/abs3ntdev/hyprexpo/main/build/CMakeFiles/install/strip.dir
