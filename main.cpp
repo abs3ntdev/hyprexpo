@@ -309,12 +309,15 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
 
     HyprlandAPI::addConfigKeyword(PHANDLE, KEYWORD_EXPO_GESTURE, ::expoGestureKeyword, {true});
 
-    vars.columns         = makeShared<Config::Values::CIntValue>("plugin:hyprexpo:columns", "columns", 3);
-    vars.gapSize         = makeShared<Config::Values::CIntValue>("plugin:hyprexpo:gap_size", "gap size", 5);
-    vars.bgCol           = makeShared<Config::Values::CColorValue>("plugin:hyprexpo:bg_col", "background color", 0xFF111111);
-    vars.workspaceMethod = makeShared<Config::Values::CStringValue>("plugin:hyprexpo:workspace_method", "workspace method", "center current");
-    vars.skipEmpty       = makeShared<Config::Values::CIntValue>("plugin:hyprexpo:skip_empty", "skip empty workspaces", 0);
-    vars.gestureDistance = makeShared<Config::Values::CIntValue>("plugin:hyprexpo:gesture_distance", "gesture distance", 200);
+    vars.columns          = makeShared<Config::Values::CIntValue>("plugin:hyprexpo:columns", "columns", 3);
+    vars.gapSize          = makeShared<Config::Values::CIntValue>("plugin:hyprexpo:gap_size", "gap size", 5);
+    vars.bgCol            = makeShared<Config::Values::CColorValue>("plugin:hyprexpo:bg_col", "background color", 0xFF111111);
+    vars.workspaceMethod  = makeShared<Config::Values::CStringValue>("plugin:hyprexpo:workspace_method", "workspace method", "center current");
+    vars.skipEmpty        = makeShared<Config::Values::CIntValue>("plugin:hyprexpo:skip_empty", "skip empty workspaces", 0);
+    vars.gestureDistance  = makeShared<Config::Values::CIntValue>("plugin:hyprexpo:gesture_distance", "gesture distance", 200);
+    vars.gestureFingers   = makeShared<Config::Values::CIntValue>("plugin:hyprexpo:gesture_fingers", "number of fingers for swipe gesture (0 to disable)", 0,
+                                                                   Config::Values::SIntValueOptions{.min = 0, .max = 9});
+    vars.gestureDirection = makeShared<Config::Values::CStringValue>("plugin:hyprexpo:gesture_direction", "swipe direction for gesture (u/d/l/r)", "u");
 
     HyprlandAPI::addConfigValueV2(PHANDLE, vars.columns);
     HyprlandAPI::addConfigValueV2(PHANDLE, vars.gapSize);
@@ -322,6 +325,26 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     HyprlandAPI::addConfigValueV2(PHANDLE, vars.workspaceMethod);
     HyprlandAPI::addConfigValueV2(PHANDLE, vars.skipEmpty);
     HyprlandAPI::addConfigValueV2(PHANDLE, vars.gestureDistance);
+    HyprlandAPI::addConfigValueV2(PHANDLE, vars.gestureFingers);
+    HyprlandAPI::addConfigValueV2(PHANDLE, vars.gestureDirection);
+
+    HyprlandAPI::reloadConfig();
+
+    // Auto-register trackpad gesture if gesture_fingers > 0
+    {
+        const int fingers = vars.gestureFingers->value();
+        if (fingers >= 2 && fingers <= 9) {
+            const std::string              dirStr = vars.gestureDirection->value();
+            eTrackpadGestureDirection dir   = g_pTrackpadGestures->dirForString(dirStr);
+            if (dir != TRACKPAD_GESTURE_DIR_NONE) {
+                auto result = g_pTrackpadGestures->addGesture(makeUnique<CExpoGesture>(), fingers, dir, 0, 1.F, false);
+                if (!result)
+                    Log::logger->log(Log::ERR, "[hyprexpo] failed to register gesture: {}", result.error());
+            } else {
+                Log::logger->log(Log::ERR, "[hyprexpo] invalid gesture_direction: {}", dirStr);
+            }
+        }
+    }
 
     return {"hyprexpo", "A plugin for an overview", "Vaxry", "1.0"};
 }
