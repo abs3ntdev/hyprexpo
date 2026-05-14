@@ -425,9 +425,9 @@ void COverview::close(bool switchToSelection) {
         const auto OLDWS = pMonitor->m_activeWorkspace;
 
         if (!NEWIDWS)
-            Config::Actions::changeWorkspace(std::to_string(NEWID));
+            (void)Config::Actions::changeWorkspace(std::to_string(NEWID));
         else
-            Config::Actions::changeWorkspace(NEWIDWS->getConfigName());
+            (void)Config::Actions::changeWorkspace(NEWIDWS->getConfigName());
 
         g_pDesktopAnimationManager->startAnimation(pMonitor->m_activeWorkspace, CDesktopAnimationManager::ANIMATION_TYPE_IN, true, true);
         g_pDesktopAnimationManager->startAnimation(OLDWS, CDesktopAnimationManager::ANIMATION_TYPE_OUT, false, true);
