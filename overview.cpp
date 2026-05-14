@@ -159,7 +159,7 @@ COverview::COverview(PHLWORKSPACE startedOn_, bool swipe_) : startedOn(startedOn
     CBox     monbox{0, 0, tileSize.x * 2, tileSize.y * 2};
 
     if (!ENABLE_LOWRES)
-        monbox = {{0, 0}, pMonitor->m_pixelSize};
+        monbox = {{0, 0}, pMonitor->m_transformedSize};
 
     int          currentid = 0;
 
@@ -298,10 +298,10 @@ void COverview::redrawID(int id, bool forcelowres) {
     CBox     monbox{0, 0, tileSize.x * 2, tileSize.y * 2};
 
     if (!forcelowres && (size->value() != pMonitor->m_size || closing))
-        monbox = {{0, 0}, pMonitor->m_pixelSize};
+        monbox = {{0, 0}, pMonitor->m_transformedSize};
 
     if (!ENABLE_LOWRES)
-        monbox = {{0, 0}, pMonitor->m_pixelSize};
+        monbox = {{0, 0}, pMonitor->m_transformedSize};
 
     auto& image = images[id];
 
