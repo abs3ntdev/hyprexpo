@@ -1,0 +1,15 @@
+[repository]
+name = "hyprexpo"
+authors = ["Vaxry", "abs3nt"]
+commit_pins = [
+    ["a47147bc095e5b3be3eb8bd04f0ac242b968cd4d", "v0.55.1"],
+]
+
+[hyprexpo]
+description = "A workspace overview plugin for Hyprland"
+authors = ["Vaxry"]
+output = "hyprexpo.so"
+build = [
+    "cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -S . -B ./build",
+    "cmake --build ./build --config Release --target hyprexpo",
+]
